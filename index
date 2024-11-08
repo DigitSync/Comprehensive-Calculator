@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitSync - Comprehensive Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff; /* Light background */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1, h2 {
+            color: #4a4a4a; /* Dark text color */
+            text-align: center;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px;
+            width: 100%;
+        }
+        input:focus, button:focus {
+            border-color: #007bff; /* Focus border color */
+            box-shadow: 0 0 5px rgba(0,123,255,0.5);
+        }
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .output-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: yellow; /* Light gray background for output */
+            border: 1px solid #ccc; /* Light border */
+            width: 100%;
+        }
+        .words-highlight {
+            font-size: 1.5em; /* Highlighted text size */
+            color: #d9534f; /* Highlight color */
+            font-weight: bold;
+        }
+        .number-text {
+            font-size: 1.3em; /* Number text size */
+            color: #007bff; /* Blue color for numbers */
+            font-weight: bold;
+        }
+        .calculator-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            /* Light green background for calculators */
+            border: 2px solid #ccc; /* Light border */
+            width: 50%; /* Width for border */
+            display: flex;
+            flex-direction: column;
+        }
+        .result {
+            font-size: 1.5em; /* Increased font size for results */
+            color: #28a745; /* Green color for results */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa; /* Light background to highlight result */
+            border: 1px solid #28a745; /* Green border */
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two columns */
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            padding: 15px;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px;
+            background-color: #ffffff; /* White background for grid items */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em; /* Smaller footer text */
+            color: #6c757d; /* Gray color */
+        }
+        /* Flexbox for side-by-side layout */
+        .container {
+            display: flex;
+            justify-content: space-between; /* Space between calculators and currency */
+            width: 100%;
+        }
+        table {
+            width: 100%; /* Full width table */
+            margin-top: 10px;
+            border-collapse: collapse; /* Collapsed borders */
+        }
+        th, td {
+            border: 1px solid #ccc; /* Light border */
+            padding: 05px; /* Padding for cells */
+            text-align: center; /* Center text */
+        }
+        th {
+            background-color: #007bff; /* Blue header background */
+            color: white; /* White text for header */
+        }
+        .links {
+            margin: 20px;
+            text-align: center;
+        }
+        .links a {
+            color: #007bff; /* Blue links */
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>DigitSync - Comprehensive Calculator</h1>
+    <div class="links">
+        <a href="https://thedigitsync.blogspot.com/" target="_blank">Website</a>
+        <a href="https://whatsapp.com/channel/0029Va92tOU6hENt5Q7Cya2a" target="_blank">WhatsApp Channel</a>
+    </div>
+    
+    <input type="number" id="numberInput" placeholder="Enter a number" min="0" max="10000000">
+    
+    <div id="output" class="output-section"></div>
+
+    <div class="container">
+        <div class="calculator-container">
+            <h2>Calculator</h2>
+            <div class="calculator">
+                <h3>Simple Calculator</h3>
+                <input type="text" id="calcInput" placeholder="Enter calculation (e.g. 2+2)">
+                <div id="calcOutput" class="result">Result: </div>
+            </div>
+            <div class="age-calculator">
+                <h3>Age and Retirement Calculator</h3>
+                <label for="birthYear">Enter Birth Year:</label>
+                <input type="number" id="birthYear" placeholder="e.g., 1990" oninput="calculateAgeRetirement()">
+                <div id="ageResult" class="result"></div>
+            </div>
+        </div>
+
+        <div class="currency">
+            <h2>Currency Calculation</h2>
+            <table>
+                <tr>
+                    <th>Denomination</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>₹500</td>
+                    <td><input type="number" id="num500" value="0" oninput="calculateTotal()"></td>
+                    <td id="total500">0</td>
+                </tr>
+                <tr>
+                    <td>₹200</td>
+                    <td><input type="number" id="num200" value="0" oninput="calculateTotal()"></td>
+                    <td id="total200">0</td>
+                </tr>
+                <tr>
+                    <td>₹100</td>
+                    <td><input type="number" id="num100" value="0" oninput="calculateTotal()"></td>
+                    <td id="total100">0</td>
+                </tr>
+                <tr>
+                    <td>₹50</td>
+                    <td><input type="number" id="num50" value="0" oninput="calculateTotal()"></td>
+                    <td id="total50">0</td>
+                </tr>
+                <tr>
+                    <td>₹20</td>
+                    <td><input type="number" id="num20" value="0" oninput="calculateTotal()"></td>
+                    <td id="total20">0</td>
+                </tr>
+                <tr>
+                    <td>₹10</td>
+                    <td><input type="number" id="num10" value="0" oninput="calculateTotal()"></td>
+                    <td id="total10">0</td>
+                </tr>
+            </table>
+            <h4>Total Amount: ₹<span id="totalDeposit" class="result">0</span></h4>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('numberInput').addEventListener('input', updateOutput);
+        document.getElementById('calcInput').addEventListener('input', calculate);
+        
+        function updateOutput() {
+            const number = parseInt(document.getElementById('numberInput').value);
+            if (isNaN(number)) {
+                document.getElementById('output').innerHTML = '';
+                return;
+            }
+
+            const numberInWords = numberToWords(number);
+            const romanNumeral = toRoman(number);
+            const assameseNumber = toAssamese(number);
+            const hindiNumber = toHindi(number);
+            const arabicNumber = toArabic(number);
+            const binaryNumber = toBinary(number);
+            const morseCode = toMorse(number);
+
+            document.getElementById('output').innerHTML = `
+                <table>
+                    <tr><th>Type</th><th>Value</th></tr>
+                    <tr><td>Words:</td><td><span class="number-text">${numberInWords}</span></td></tr>
+                    <tr><td>Roman:</td><td>${romanNumeral}</td></tr>
+                    <tr><td>Assamese:</td><td>${assameseNumber}</td></tr>
+                    <tr><td>Hindi:</td><td>${hindiNumber}</td></tr>
+                    <tr><td>Arabic:</td><td>${arabicNumber}</td></tr>
+                    <tr><td>Binary:</td><td>${binaryNumber}</td></tr>
+                    <tr><td>Morse Code:</td><td>${morseCode}</td></tr>
+                </table>
+            `;
+        }
+
+        function numberToWords(num) {
+            const a = [
+                '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+                'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+            ];
+            const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+            const units = ['', 'thousand', 'lakh', 'crore'];
+
+            if (num === 0) return 'zero';
+
+            let str = '';
+            let i = 0;
+
+            while (num > 0) {
+                const remainder = num % 100;
+                let chunk = '';
+
+                if (remainder < 20) {
+                    chunk = a[remainder];
+                } else {
+                    chunk = b[Math.floor(remainder / 10)] + (remainder % 10 !== 0 ? '-' + a[remainder % 10] : '');
+                }
+
+                if (Math.floor(num / 100) % 10 !== 0) {
+                    chunk = a[Math.floor(num / 100) % 10] + ' hundred ' + chunk;
+                }
+
+                if (chunk) {
+                    str = chunk + ' ' + units[i] + ' ' + str;
+                }
+
+                num = Math.floor(num / 1000);
+                i++;
+            }
+
+            return str.trim();
+        }
+
+        function toRoman(num) {
+            if (num >= 4000) return 'Number too large for Roman numerals';
+
+            const romanNumerals = [
+                ["M", 1000], ["CM", 900], ["D", 500], ["CD", 400],
+                ["C", 100], ["XC", 90], ["L", 50], ["XL", 40],
+                ["X", 10], ["IX", 9], ["V", 5], ["IV", 4],
+                ["I", 1]
+            ];
+
+            let roman = '';
+            for (let [letter, value] of romanNumerals) {
+                while (num >= value) {
+                    roman += letter;
+                    num -= value;
+                }
+            }
+            return roman;
+        }
+
+        function toAssamese(num) {
+            const assameseDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return num.toString().split('').map(digit => assameseDigits[digit]).join('');
+        }
+
+        function toHindi(num) {
+            const hindiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+            return num.toString().split('').map(digit => hindiDigits[digit]).join('');
+        }
+
+        function toArabic(num) {
+            const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            return num.toString().split('').map(digit => arabicDigits[digit]).join('');
+        }
+
+        function toBinary(num) {
+            return num.toString(2);
+        }
+
+        function toMorse(num) {
+            const morseDigits = ['-----', '.----', '..---', '...--', '....-', '.....', '-....', '--...', '---..', '----.'];
+            return num.toString().split('').map(digit => morseDigits[parseInt(digit)]).join(' ');
+        }
+
+        function calculate() {
+            const expression = document.getElementById('calcInput').value;
+            try {
+                const result = eval(expression);
+                document.getElementById('calcOutput').innerHTML = 'Result: <strong>' + result + '</strong>'; // Highlight result
+            } catch {
+                document.getElementById('calcOutput').innerHTML = 'Invalid expression';
+            }
+        }
+
+        // Currency calculation functionality
+        function calculateTotal() {
+            const num500 = document.getElementById('num500').value || 0;
+            const num200 = document.getElementById('num200').value || 0;
+            const num100 = document.getElementById('num100').value || 0;
+            const num50 = document.getElementById('num50').value || 0;
+            const num20 = document.getElementById('num20').value || 0;
+            const num10 = document.getElementById('num10').value || 0;
+
+            const total500 = num500 * 500;
+            const total200 = num200 * 200;
+            const total100 = num100 * 100;
+            const total50 = num50 * 50;
+            const total20 = num20 * 20;
+            const total10 = num10 * 10;
+
+            document.getElementById('total500').innerText = total500;
+            document.getElementById('total200').innerText = total200;
+            document.getElementById('total100').innerText = total100;
+            document.getElementById('total50').innerText = total50;
+            document.getElementById('total20').innerText = total20;
+            document.getElementById('total10').innerText = total10;
+
+            const totalDeposit = total500 + total200 + total100 + total50 + total20 + total10;
+            document.getElementById('totalDeposit').innerText = totalDeposit;
+        }
+
+        // Age and Retirement Calculator functionality
+        function calculateAgeRetirement() {
+            const currentYear = new Date().getFullYear();
+            const birthYear = document.getElementById('birthYear').value;
+            if (birthYear) {
+                const age = currentYear - birthYear;
+                const retirementYear = parseInt(birthYear) + 60;
+
+                document.getElementById('ageResult').innerHTML = 
+                    "Age: " + age + " years<br>Retirement Year: " + retirementYear;
+            } else {
+                document.getElementById('ageResult').innerHTML = "";
+            }
+        }
+    </script>
+    
+    <footer>
+        &copy; 2023 FearlesSS Hacker. All Rights Reserved.
+    </footer>
+</body>
+</html>
